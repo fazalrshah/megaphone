@@ -1,0 +1,20 @@
+# Local HTTPS front for Postiz so Meta's HTTPS-redirect requirement is satisfied
+# on a localhost dev box — no public tunnel, no third-party bouncer.
+#
+#   brew install mkcert caddy
+#   mkcert -install
+#   mkcert localhost 127.0.0.1 ::1     # produces localhost+2.pem / localhost+2-key.pem
+#   caddy run --config Caddyfile
+#
+# Then set Postiz MAIN_URL / FRONTEND_URL / NEXT_PUBLIC_BACKEND_URL to https://localhost:8443(/api)
+# and register https://localhost:8443/integrations/social/instagram-standalone in Meta.
+
+{
+	# Caddy grabs :80 for auto HTTP->HTTPS redirects; disable if :80 is already taken.
+	auto_https disable_redirects
+}
+
+localhost:8443 {
+	tls /ABSOLUTE/PATH/TO/localhost+2.pem /ABSOLUTE/PATH/TO/localhost+2-key.pem
+	reverse_proxy localhost:4007        # your Postiz published port
+}

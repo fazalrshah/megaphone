@@ -1,0 +1,8 @@
+# Drop this next to your Postiz docker-compose.yaml as docker-compose.override.yml
+# so the scope patch survives `docker compose down/up`. Then:
+#   docker compose build postiz && docker compose up -d postiz
+services:
+  postiz:
+    build:
+      context: ./patch        # path to the directory containing patch/Dockerfile
+    image: postiz-app:meta-patched
